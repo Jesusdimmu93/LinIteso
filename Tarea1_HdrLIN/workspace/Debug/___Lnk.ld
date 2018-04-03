@@ -27,31 +27,31 @@
 /* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           */
 /* ---------------------------------------------------------------------------- */
 
-INPUT (C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\dbg_console.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\board_lowlevel.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\board_memories.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\exceptions.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\pio.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\mpu.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\pmc.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\wdt.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\pio_it.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\supc.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\tc.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\xdma_hardware_interface.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\xdmac.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\uart.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\xdmad.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\syscalls.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\system_sam.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\timetick.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\app_scheduler.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\led.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\linif.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\linif_cfg.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\main.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\Tasks.o 
-C:\Users\uid42696\Desktop\Iteso_Projects\Tarea1_HdrLIN\workspace\Debug\startup_sam.o)
+INPUT (C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\dbg_console.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\board_lowlevel.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\board_memories.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\exceptions.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\pio.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\mpu.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\pmc.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\wdt.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\pio_it.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\supc.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\tc.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\xdma_hardware_interface.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\xdmac.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\uart.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\xdmad.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\syscalls.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\system_sam.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\timetick.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\app_scheduler.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\led.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\linif.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\linif_cfg.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\main.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\Tasks.o 
+C:\Users\DIMMU\Documents\LinIteso\Tarea1_HdrLIN\workspace\Debug\startup_sam.o)
 
 /*------------------------------------------------------------------------------
  *      Linker script for running in internal FLASH on the ATSAMV71Q21

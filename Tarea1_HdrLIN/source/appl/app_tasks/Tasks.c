@@ -31,6 +31,7 @@ void vfnTsk_2msB(void)
 void vfnTsk_10ms(void)
 {
 	static uint8_t u8500ms_Ctr=0,i;
+  LinPduType* PduInfoPtr; 
   
 	u8500ms_Ctr++;
 	
@@ -40,7 +41,7 @@ void vfnTsk_10ms(void)
 		LED_Toggle( 1 );
     
 	}   
-  Lin_SendFrame(0x05);
+  Lin_SendFrame(0x05,PduInfoPtr );
 	/*Lin Pid hardcoded*/
   
     

@@ -50,10 +50,11 @@ void Lin_Isr(void);
  *   None
  *
  *****************************************************************************/
-void Lin_Init (uint16_t LinBaudrate)
+void Lin_Init ( const LinConfigType* Config)
 {
     LinState = IDLE;
-    Baudrate= LinBaudrate;
+    //To complete
+    //Baudrate= LinBaudrate;
     const Pin pPins[] = LIN_UART_PINS;
     PIO_Configure(pPins, PIO_LISTSIZE(pPins));
     PMC_EnablePeripheral(LIN_BASE_ID);
@@ -83,7 +84,7 @@ void Lin_Init (uint16_t LinBaudrate)
  *   None
  *
  *****************************************************************************/
-void Lin_SendFrame (uint8_t LinPid)
+Std_ReturnType Lin_SendFrame (uint8_t LinPid, LinPduType* PduInfoPtr )
 {           
 	if(LinState == IDLE )//&& LinPid != NO_CMD)
 	{
