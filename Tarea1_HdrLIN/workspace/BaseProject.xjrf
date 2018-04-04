@@ -264,9 +264,9 @@
       </PI.39>
       <PI.4>
        <Bookmarks_num_>0</Bookmarks_num_>
-       <C>22</C>
-       <L>196</L>
+       <L>194</L>
        <P>..\source\bsw\mcal\com\uart\uart.c</P>
+       <VL>177</VL>
       </PI.4>
       <PI.40>
        <Bookmarks_num_>0</Bookmarks_num_>
@@ -351,11 +351,11 @@
        <VL>36</VL>
       </PI.8>
       <PI.9>
-       <Bookmarks type="B">BLAAAAAACLAAAAAADEAAAAAADHAAAAAADLAAAAAADNAAAAAAGNAAAAAAGOAAAAAAHAAAAAAAHHAAAAAA</Bookmarks>
-       <Bookmarks_num_>10</Bookmarks_num_>
-       <C>16</C>
-       <L>4</L>
+       <Bookmarks type="B">BLAAAAAACKAAAAAADDAAAAAADGAAAAAAGAAAAAAAGCAAAAAA</Bookmarks>
+       <Bookmarks_num_>6</Bookmarks_num_>
+       <L>97</L>
        <P>..\source\bsw\ecual\com\linif\linif.c</P>
+       <VL>90</VL>
       </PI.9>
      </REG_ROOT>
     </EditorOptions>
@@ -827,7 +827,7 @@
      <Documents.0>
       <ActiveDocument>
        <Maximized>True</Maximized>
-       <RelativeFileName>..\source\bsw\ecual\com\linif\linif.c</RelativeFileName>
+       <RelativeFileName>..\source\infrastructure\toolset\gcc\startup_sam.c</RelativeFileName>
       </ActiveDocument>
       <Editor.0>
        <FileBarIndex>0</FileBarIndex>
@@ -878,7 +878,7 @@
        <RelativeFileName>..\source\bsw\ecual\com\linif\linif.h</RelativeFileName>
       </Editor.3>
       <Editor.4>
-       <FileBarIndex>6</FileBarIndex>
+       <FileBarIndex>5</FileBarIndex>
        <RectPosBottom>344</RectPosBottom>
        <RectPosLeft>26</RectPosLeft>
        <RectPosRight>850</RectPosRight>
@@ -894,7 +894,7 @@
        <RelativeFileName>..\source\bsw\ecual\com\linif\linif_cfg.h</RelativeFileName>
       </Editor.5>
       <Editor.6>
-       <FileBarIndex>5</FileBarIndex>
+       <FileBarIndex>6</FileBarIndex>
        <RectPosBottom>396</RectPosBottom>
        <RectPosLeft>78</RectPosLeft>
        <RectPosRight>902</RectPosRight>
@@ -1112,7 +1112,7 @@
       <TypeOfWnd>-1</TypeOfWnd>
       <DockRect.0>
        <AreHorz>0</AreHorz>
-       <Percent>566</Percent>
+       <Percent>473</Percent>
        <Type>0</Type>
        <TypeOfWnd>-1</TypeOfWnd>
        <DockRect.0>
@@ -1299,7 +1299,7 @@
       </DockRect.1>
       <DockRect.2>
        <AreHorz>0</AreHorz>
-       <Percent>87</Percent>
+       <Percent>180</Percent>
        <Type>0</Type>
        <TypeOfWnd>-1</TypeOfWnd>
        <DockRect.0>
@@ -2126,9 +2126,21 @@
             <Items.1>
              <__>
               <Name>UART2_THR</Name>
-              <Options>1</Options>
+              <Options>5</Options>
+              <Items.0>
+               <__>
+                <Name>TXCHR</Name>
+                <Options>4</Options>
+               </__>
+              </Items.0>
              </__>
             </Items.1>
+            <Items.2>
+             <__>
+              <Name>UART2_BRGR</Name>
+              <Options>0</Options>
+             </__>
+            </Items.2>
            </__>
           </Items.2>
          </__>

@@ -192,9 +192,7 @@ void UART_PutCharIT( Uart *uart, uint8_t c)
   {
     uart->UART_CR = UART_CR_TXEN; 
     uart->UART_THR = c;
-     
-	
-    uart->UART_IER = UART_IER_TXRDY;        
+        
     uart->UART_IER = UART_IER_TXEMPTY;       
   }
 	/* Send character*/

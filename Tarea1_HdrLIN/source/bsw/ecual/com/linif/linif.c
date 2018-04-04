@@ -26,7 +26,6 @@
 LinStateType LinState;
 uint8_t PidCommand;
 uint32_t Baudrate;
-uint32_t sleepTime;
 Uart *pUart = LIN_BASE_UART;
 /********************************************************************************
 *                               Static Function Declarations
@@ -55,18 +54,6 @@ void Lin_Init (uint16_t LinBaudrate)
 {
     LinState = IDLE;
     Baudrate= LinBaudrate;
-    if(Baudrate == 19200)
-    {
-      sleepTime = 2750;
-    }
-    else if(Baudrate == 9600)
-    {
-      sleepTime = 5000;
-    }
-    else if(Baudrate == 2400)
-    {
-      sleepTime = 9000;
-    }
     const Pin pPins[] = LIN_UART_PINS;
     PIO_Configure(pPins, PIO_LISTSIZE(pPins));
     PMC_EnablePeripheral(LIN_BASE_ID);
@@ -108,15 +95,7 @@ void Lin_SendFrame (uint8_t LinPid)
       Lin_Isr();
 	}
 }
-void sleep(uint32_t ms)
-{
- volatile uint32_t counter = 0;
- uint32_t i = 0;
- for(i = 0; i < ms; i++)
- {
-      counter++;
- }
-}
+
 void Lin_Isr(void)
 {
   uint32_t tempBaudRate = 0;
@@ -129,7 +108,6 @@ void Lin_Isr(void)
 		case SEND_BREAK:
       /*Sending Break */
       /*Configre new baudrate to make a larger stop in order to accomplish the Break time*/
-      //UART_UpdateBaudRate(pUart, (BOARD_MCK / (Baudrate*9/14)) / 16);
       tempBaudRate = (Baudrate * 5) / 8;
       UART_UpdateBaudRate(pUart, tempBaudRate);
 			UART_PutCharIT(pUart, BREAK_CMD);
@@ -137,8 +115,6 @@ void Lin_Isr(void)
 		break;
 
   case SEND_SYNC:
-      /*Wait a specific time to allow break data to be in the tx bus before update baude rate again*/
-      sleep(sleepTime);
       /*Update Baud rate*/
       UART_UpdateBaudRate(pUart, Baudrate);
       /*Sending Sync*/
