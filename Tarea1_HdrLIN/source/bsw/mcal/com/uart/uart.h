@@ -68,7 +68,7 @@ void UART_CompareConfig(Uart *uart, uint8_t Val1, uint8_t Val2);
 
 uint32_t UART_IsTxReady(Uart *uart);
 
-void UART_UpdateBaudRate(Uart *uart,uint32_t newBaudRate);
+void UART_UpdateBaudRate(Uart *uart,uint32_t baudrate);
 
 #endif //#ifndef UART_H
 

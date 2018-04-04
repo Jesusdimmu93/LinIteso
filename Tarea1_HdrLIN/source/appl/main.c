@@ -52,19 +52,17 @@ extern int main( void )
 	WDT_Disable( WDT ) ;
 
 	/* Output example information */
-	printf( "\n\r-- Getting Started Example Workspace Updated!!! %s --\n\r", SOFTPACK_VERSION ) ;
-	printf( "-- %s\n\r", BOARD_NAME ) ;
-	printf( "-- Compiled: %s %s With %s--\n\r", __DATE__, __TIME__ , COMPILER_NAME);
+	printf( "\n\r-- LIN over UART implementation !!! --\n\r");
 
 	/* Enable I and D cache */
 	//SCB_EnableICache();
   //SCB_EnableDCache();
 
-	printf( "Configure LED PIOs.\n\r" ) ;
+	//printf( "Configure LED PIOs.\n\r" ) ;
 	_ConfigureLeds() ;
 	
   	/*Baudrate Hardcoded*/
-  	Lin_Init(19200);
+  	Lin_Init(19200);    //19200//9600//2400
   	/* Initialize Task Scheduler */
 	vfnScheduler_Init(&Tasks[0]);
 	/* Start execution of task scheduler */

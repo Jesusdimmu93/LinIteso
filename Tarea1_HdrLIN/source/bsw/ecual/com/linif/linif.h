@@ -43,7 +43,6 @@
 *                               Function Declarations
 ********************************************************************************/
 
-extern void Lin_Init ( const LinConfigType* Config);
-extern Std_ReturnType Lin_SendFrame ( uint8_t Channel, LinPduType* PduInfoPtr );
-extern Std_ReturnType Lin_GetSlaveResponse ( uint8_t Channel, uint8_t** LinSduPtr ); 
+extern void Lin_Init (uint16_t LinBaudrate);
+extern void Lin_SendFrame (uint8_t LinPid);
 #endif

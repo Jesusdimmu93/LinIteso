@@ -25,7 +25,8 @@
  ********************************************************************************/
 LinStateType LinState;
 uint8_t PidCommand;
-uint16_t Baudrate;
+uint32_t Baudrate;
+uint32_t sleepTime;
 Uart *pUart = LIN_BASE_UART;
 /********************************************************************************
 *                               Static Function Declarations
@@ -50,11 +51,22 @@ void Lin_Isr(void);
  *   None
  *
  *****************************************************************************/
-void Lin_Init ( const LinConfigType* Config)
+void Lin_Init (uint16_t LinBaudrate)
 {
     LinState = IDLE;
-    //To complete
-    //Baudrate= LinBaudrate;
+    Baudrate= LinBaudrate;
+    if(Baudrate == 19200)
+    {
+      sleepTime = 2750;
+    }
+    else if(Baudrate == 9600)
+    {
+      sleepTime = 5000;
+    }
+    else if(Baudrate == 2400)
+    {
+      sleepTime = 9000;
+    }
     const Pin pPins[] = LIN_UART_PINS;
     PIO_Configure(pPins, PIO_LISTSIZE(pPins));
     PMC_EnablePeripheral(LIN_BASE_ID);
@@ -84,7 +96,7 @@ void Lin_Init ( const LinConfigType* Config)
  *   None
  *
  *****************************************************************************/
-Std_ReturnType Lin_SendFrame (uint8_t LinPid, LinPduType* PduInfoPtr )
+void Lin_SendFrame (uint8_t LinPid)
 {           
 	if(LinState == IDLE )//&& LinPid != NO_CMD)
 	{
@@ -96,9 +108,18 @@ Std_ReturnType Lin_SendFrame (uint8_t LinPid, LinPduType* PduInfoPtr )
       Lin_Isr();
 	}
 }
-
+void sleep(uint32_t ms)
+{
+ volatile uint32_t counter = 0;
+ uint32_t i = 0;
+ for(i = 0; i < ms; i++)
+ {
+      counter++;
+ }
+}
 void Lin_Isr(void)
 {
+  uint32_t tempBaudRate = 0;
    UART_DisableIt(pUart, UART_IDR_TXEMPTY);
    UART_DisableIt(pUart, UART_IDR_TXRDY);
    UART_SetTransmitterEnabled(pUart, 0);
@@ -108,14 +129,19 @@ void Lin_Isr(void)
 		case SEND_BREAK:
       /*Sending Break */
       /*Configre new baudrate to make a larger stop in order to accomplish the Break time*/
-      UART_UpdateBaudRate(pUart, (BOARD_MCK / (Baudrate*9/14)) / 16);
+      //UART_UpdateBaudRate(pUart, (BOARD_MCK / (Baudrate*9/14)) / 16);
+      tempBaudRate = (Baudrate * 5) / 8;
+      UART_UpdateBaudRate(pUart, tempBaudRate);
 			UART_PutCharIT(pUart, BREAK_CMD);
-			LinState = SEND_SYNC;
+			LinState = SEND_SYNC; //SEND_SYNC
 		break;
 
-		case SEND_SYNC:
+  case SEND_SYNC:
+      /*Wait a specific time to allow break data to be in the tx bus before update baude rate again*/
+      sleep(sleepTime);
+      /*Update Baud rate*/
+      UART_UpdateBaudRate(pUart, Baudrate);
       /*Sending Sync*/
-      UART_UpdateBaudRate(pUart, (BOARD_MCK / (Baudrate)) / 16);
     	UART_PutCharIT(pUart, SYNC_CMD);
 			LinState = SEND_PID;
 		break;

@@ -47,6 +47,7 @@
  ********************************************************************************/
 
 FcnPtrtype Isr_Callback;
+uint32_t gMasterClock;
 /*------------------------------------------------------------------------------
  *         Exported functions
  *----------------------------------------------------------------------------*/
@@ -76,6 +77,7 @@ void UART_Configure(Uart *uart,
 	uart->UART_MR = mode;
 
 	/* Configure baudrate*/
+  gMasterClock = masterClock; 
 	uart->UART_BRGR = (masterClock / baudrate) / 16;
 
 	uart->UART_CR = UART_CR_TXEN;//Disable just for Tarea1//// | UART_CR_RXEN;
@@ -102,9 +104,9 @@ void UART_SetTransmitterEnabled(Uart *uart, uint8_t enabled)
 	}
 }
 
-void UART_UpdateBaudRate(Uart *uart,uint32_t newBaudRate)
+void UART_UpdateBaudRate(Uart *uart,uint32_t baudrate)
 {
-    uart->UART_BRGR = newBaudRate;
+    uart->UART_BRGR = (gMasterClock / baudrate) / 16;
 }
 
 /**
@@ -279,8 +281,12 @@ void UART4_Handler (void)
 
 void UART2_Handler()
 {
+  //pUart->UART_IDR = UART_IDR_TXEMPTY;
+  //pUart->UART_IDR = UART_IDR_TXRDY;
+  //pUart->UART_CR = UART_CR_TXDIS  ;
+  //pUart->UART_CR = UART_CR_REQCLR ;
   if(Isr_Callback != NULL)
   	{
   		Isr_Callback();
   	}
-}
+	}          
