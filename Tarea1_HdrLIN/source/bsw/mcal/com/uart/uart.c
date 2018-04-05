@@ -185,21 +185,6 @@ void UART_PutChar( Uart *uart, uint8_t c)
 	while (!UART_IsTxSent(uart));
 }
 
-void UART_PutCharIT( Uart *uart, uint8_t c)
-{
-	/* Wait for the transmitter to be ready*/
-//	if(!UART_IsTxSent(uart))
-  {
-    uart->UART_CR = UART_CR_TXEN; 
-    uart->UART_THR = c;
-        
-    uart->UART_IER = UART_IER_TXEMPTY;       
-  }
-	/* Send character*/
-	
-
-}
-
 /**
  * \brief   Get present status
  * \param uart  Pointer to an UART peripheral.

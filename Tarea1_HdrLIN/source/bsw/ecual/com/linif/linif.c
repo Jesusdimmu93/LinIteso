@@ -64,8 +64,6 @@ void Lin_Init (uint16_t LinBaudrate)
   
     NVIC_ClearPendingIRQ(LIN_BASE_IRQ);
   	NVIC_SetPriority(LIN_BASE_IRQ, 1);    
-    ///Done in uart.c UART_Configure()//pUart->UART_CR = UART_CR_RXEN ;//
-    UART_EnableIt(pUart, UART_IER_TXRDY);
 	  /* Enable interrupt  */
   	NVIC_EnableIRQ(LIN_BASE_IRQ);
 }
@@ -85,7 +83,7 @@ void Lin_Init (uint16_t LinBaudrate)
  *****************************************************************************/
 void Lin_SendFrame (uint8_t LinPid)
 {           
-	if(LinState == IDLE )//&& LinPid != NO_CMD)
+	if(LinState == IDLE )
 	{
       
     	PidCommand = LinPid;
@@ -101,7 +99,7 @@ void Lin_Isr(void)
   uint32_t tempBaudRate = 0;
    UART_DisableIt(pUart, UART_IDR_TXEMPTY);
    UART_DisableIt(pUart, UART_IDR_TXRDY);
-   UART_SetTransmitterEnabled(pUart, 0);
+   UART_SetTransmitterEnabled(pUart, 0);  /*Disable UART*/
 
   switch(LinState)
 	{
@@ -110,22 +108,31 @@ void Lin_Isr(void)
       /*Configre new baudrate to make a larger stop in order to accomplish the Break time*/
       tempBaudRate = (Baudrate * 5) / 8;
       UART_UpdateBaudRate(pUart, tempBaudRate);
-			UART_PutCharIT(pUart, BREAK_CMD);
-			LinState = SEND_SYNC; //SEND_SYNC
+      UART_SetTransmitterEnabled(pUart, 1); /*Enable UART*/
+      UART_PutChar(pUart, BREAK_CMD);
+      LinState = SEND_SYNC; //SEND_SYNC
+      UART_EnableIt(pUart, UART_IER_TXEMPTY);
+
+			
 		break;
 
   case SEND_SYNC:
       /*Update Baud rate*/
       UART_UpdateBaudRate(pUart, Baudrate);
       /*Sending Sync*/
-    	UART_PutCharIT(pUart, SYNC_CMD);
-			LinState = SEND_PID;
+      UART_SetTransmitterEnabled(pUart, 1); /*Enable UART*/
+      UART_PutChar(pUart, SYNC_CMD);
+      LinState = SEND_PID;
+      UART_EnableIt(pUart, UART_IER_TXEMPTY);
+			
 		break;
 
 		case SEND_PID:
       /*Sending Pid*/
-			UART_PutCharIT(pUart, PidCommand);
-			LinState = IDLE;
+      UART_SetTransmitterEnabled(pUart, 1); /*Enable UART*/
+      UART_PutChar(pUart, PidCommand);
+      LinState = IDLE;
+      UART_EnableIt(pUart, UART_IER_TXEMPTY);
 		break;
   
 		case SEND_RESPONSE:
