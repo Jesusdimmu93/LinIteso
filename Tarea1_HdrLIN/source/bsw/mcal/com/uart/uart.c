@@ -258,7 +258,7 @@ void UART4_Handler (void)
 {
 	if(Isr_Callback != NULL)
 	{
-		Isr_Callback();
+		Isr_Callback((uint8_t)3);
 	}
 }
 
@@ -270,6 +270,6 @@ void UART2_Handler()
   //pUart->UART_CR = UART_CR_REQCLR ;
   if(Isr_Callback != NULL)
   	{
-  		Isr_Callback();
+  		Isr_Callback((uint8_t)1);
   	}
 	}          

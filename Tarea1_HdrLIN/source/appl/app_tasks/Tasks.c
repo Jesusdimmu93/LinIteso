@@ -7,7 +7,7 @@
 
 #include "Tasks.h"
 #include "led.h"
-#include "linif.h"
+#include "linNm.h"
 
 uint8_t u8100ms_Ctr=0;
 uint8_t u8100ms_Ctr2=0;
@@ -38,13 +38,10 @@ void vfnTsk_10ms(void)
 	{
 		u8500ms_Ctr = 0;
 		LED_Toggle( 1 );
-    
-	}   
-  Lin_SendFrame(0x05);
-	/*Lin Pid hardcoded*/
-  
-    
-    
+	}
+
+    LinNm_10ms();
+
 }
 
 void vfnTsk_50ms(void)

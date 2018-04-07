@@ -4,7 +4,8 @@
 
 #include "board.h"
 #include "app_scheduler.h"
-#include "Tasks.h"    
+#include "Tasks.h"
+#include "linif_cfg.h"
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -62,7 +63,7 @@ extern int main( void )
 	_ConfigureLeds() ;
 	
   	/*Baudrate Hardcoded*/
-  	Lin_Init(19200);    //19200//9600//2400
+  	Lin_Init(&LinConfig);
   	/* Initialize Task Scheduler */
 	vfnScheduler_Init(&Tasks[0]);
 	/* Start execution of task scheduler */
