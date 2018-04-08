@@ -63,7 +63,7 @@ extern int main( void )
 	_ConfigureLeds() ;
 	
   	/*Baudrate Hardcoded*/
-  	Lin_Init(&LinConfig);
+    Lin_Init(&LinConfig);
   	/* Initialize Task Scheduler */
 	vfnScheduler_Init(&Tasks[0]);
 	/* Start execution of task scheduler */

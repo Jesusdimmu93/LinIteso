@@ -27,6 +27,7 @@ typedef enum
     SEND_SYNC,
     SEND_PID,
     SEND_RESPONSE,
+    SEND_CHKSUM,
     SEND_EOT
 }LinStateType;
 
@@ -59,4 +60,3 @@ typedef struct
     LinFrameDlType         Dl;
     uint8_t*               SduPtr;
 }LinPduType;
-

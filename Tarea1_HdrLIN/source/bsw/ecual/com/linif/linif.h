@@ -43,5 +43,10 @@
 
 extern void Lin_Init ( const LinConfigType* Config);
 extern Std_ReturnType Lin_SendFrame ( uint8_t Channel, LinPduType* PduInfoPtr );
+extern Std_ReturnType Lin_CRC_Calculation (LinPduType* LinCRC);
 extern Std_ReturnType Lin_GetSlaveResponse ( uint8_t Channel, uint8_t** LinSduPtr );
+void LIN_UpdateBaudRate(uint8_t Channel,uint32_t baudrate);
+void LIN_SetTransmitterEnabled(uint8_t Channel, uint8_t enabled);
+void LIN_PutChar( uint8_t Channel, uint8_t c);
+void LIN_EnableIt(uint8_t Channel, uint32_t mode);
 #endif

@@ -50,6 +50,8 @@ UartChannelsType UartChannel[3] =
 };
 
 LinCtlType LinCtlChnl[3];
+LinPduType LinPduFrame;
+uint8_t LinTXCounter;
 /********************************************************************************
 *                               Static Function Declarations
 ********************************************************************************/
@@ -147,6 +149,11 @@ Std_ReturnType Lin_GetSlaveResponse ( uint8_t Channel, uint8_t** LinSduPtr )
 
 }
 
+Std_ReturnType Lin_CRC_Calculation (LinPduType* LinCRC)
+{
+
+}
+
 /*En un punto se tendra que cambiar el argumento a tipo Uart * y buscar su canal virtual*/
 void Lin_Isr(uint8_t Channel)
 {
@@ -159,38 +166,95 @@ void Lin_Isr(uint8_t Channel)
         case SEND_BREAK:
             /*Sending Break */
             /*Configre new baudrate to make a larger stop in order to accomplish the Break time*/
-            //tempBaudRate = (Baudrate * 5) / 8;
-            //UART_UpdateBaudRate(pUart, tempBaudRate);
-            //UART_SetTransmitterEnabled(pUart, 1); /*Enable UART*/
-            //UART_PutChar(pUart, BREAK_CMD);
-            LinState = SEND_SYNC; //SEND_SYNC
-            //UART_EnableIt(pUart, UART_IER_TXEMPTY);
+            LIN_UpdateBaudRate(Channel, ((uint32_t)LinCtlChnl[Channel].BaudRate*5)/8);
+            LIN_SetTransmitterEnabled(Channel,(uint8_t) 1); /*Enable UART*/
+            LIN_PutChar(Channel, BREAK_CMD);
+            LinState = SEND_SYNC;
+            LIN_EnableIt(Channel, UART_IER_TXEMPTY);
         break;
 
         case SEND_SYNC:
               /*Update Baud rate*/
-              //UART_UpdateBaudRate(pUart, Baudrate);
+              LIN_UpdateBaudRate(Channel, (uint32_t)LinCtlChnl[Channel].BaudRate);
               /*Sending Sync*/
-              //UART_SetTransmitterEnabled(pUart, 1); /*Enable UART*/
-              //UART_PutChar(pUart, SYNC_CMD);
+              LIN_SetTransmitterEnabled(Channel,(uint8_t) 1); /*Enable UART*/
+              LIN_PutChar(Channel, SYNC_CMD);
               LinState = SEND_PID;
-              //UART_EnableIt(pUart, UART_IER_TXEMPTY);
+              LIN_EnableIt(Channel, UART_IER_TXEMPTY);
         break;
     
         case SEND_PID:
             /*Sending Pid*/
-            //UART_SetTransmitterEnabled(pUart, 1); /*Enable UART*/
-            //UART_PutChar(pUart, PidCommand);
-            LinState = IDLE;
-            //UART_EnableIt(pUart, UART_IER_TXEMPTY);
+            LIN_SetTransmitterEnabled(Channel,(uint8_t) 1); /*Enable UART*/
+            LIN_PutChar(Channel,(uint8_t) LinPduFrame.Pid );
+            if(LinPduFrame.Drc==LIN_MASTER_RESPONSE)
+            {
+                LinState = IDLE;
+            }
+            else if(LinPduFrame.Drc==LIN_SLAVE_RESPONSE)
+            {
+                LinState = SEND_RESPONSE;
+                LinTXCounter=LinPduFrame.Dl;
+            }
+            LIN_EnableIt(Channel, UART_IER_TXEMPTY);
         break;
 
         case SEND_RESPONSE:
+            LIN_SetTransmitterEnabled(Channel,(uint8_t) 1); /*Enable UART*/
+            if(LinTXCounter==0)
+            {
+                LinState = SEND_CHKSUM;
+            }
+            else
+            {
+                LIN_PutChar(Channel,(uint8_t) LinPduFrame.SduPtr[LinPduFrame.Dl-LinTXCounter] );
+                LinTXCounter--;
+                /*Nothing Yet**/
+            }
+            LIN_EnableIt(Channel, UART_IER_TXEMPTY);
+        break;
 
+        case SEND_CHKSUM:
+            LIN_UpdateBaudRate(Channel, (uint32_t)LinCtlChnl[Channel].BaudRate);
+            LIN_SetTransmitterEnabled(Channel,(uint8_t) 1); /*Enable UART*/
+            LIN_PutChar(Channel, SYNC_CMD);
+            LinState = IDLE;
+            LIN_EnableIt(Channel, UART_IER_TXEMPTY);
         break;
 
         default:
             LinState = IDLE;
         break;
     }
+}
+
+void LIN_UpdateBaudRate(uint8_t Channel,uint32_t baudrate)
+{
+    UartChannel[Channel].uart->UART_BRGR = (BOARD_MCK / baudrate) / 16;
+}
+
+void LIN_SetTransmitterEnabled(uint8_t Channel, uint8_t enabled)
+{
+	if (enabled) {
+		UartChannel[Channel].uart->UART_CR = UART_CR_TXEN;
+	} else {
+		UartChannel[Channel].uart->UART_CR = UART_CR_TXDIS;
+	}
+}
+
+void LIN_PutChar( uint8_t Channel, uint8_t c)
+{
+	/* Wait for the transmitter to be ready*/
+	//while (!UART_IsRxReady(uart) && !UART_IsTxSent(uart));
+
+	/* Send character*/
+	UartChannel[Channel].uart->UART_THR = c;
+
+	/* Wait for the transfer to complete*/
+	//while (!UART_IsTxSent(uart));
+}
+
+void LIN_EnableIt(uint8_t Channel, uint32_t mode)
+{
+	UartChannel[Channel].uart->UART_IER = mode;
 }
