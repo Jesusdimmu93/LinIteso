@@ -22,13 +22,13 @@
 ********************************************************************************/
 LinChannelType LinChannel[] = 
 {
-	{(uint16_t)LIN2_ID, BAUDR_19200}
+	{(uint16_t)LIN1_ID, BAUDR_19200}
 };
 
 
 LinConfigType LinConfig = 
 {
-	LinChannel,
+	&LinChannel[0],
 	(sizeof(LinChannel)/sizeof(LinChannelType))
 };
 /********************************************************************************

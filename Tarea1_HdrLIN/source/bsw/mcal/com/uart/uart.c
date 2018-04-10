@@ -186,6 +186,19 @@ void UART_PutChar( Uart *uart, uint8_t c)
 }
 
 /**
+ * \brief  Sends one packet of data through the specified UART peripheral. This
+ * function operates Asynchronously, so it returns immediately after  data is stored in Tx register.
+ *
+ * \param uart  Pointer to an UART peripheral.
+ * \param c  Character to send
+ */
+void UART_PutCharAsync( Uart *uart, uint8_t c)
+{
+	/* Put character*/
+	uart->UART_THR = c;
+}
+
+/**
  * \brief   Get present status
  * \param uart  Pointer to an UART peripheral.
  */
@@ -262,12 +275,13 @@ void UART4_Handler (void)
 	}
 }
 
+/**
+ * \brief UART2 Handler.
+ *
+ * \param None.
+ */
 void UART2_Handler()
 {
-  //pUart->UART_IDR = UART_IDR_TXEMPTY;
-  //pUart->UART_IDR = UART_IDR_TXRDY;
-  //pUart->UART_CR = UART_CR_TXDIS  ;
-  //pUart->UART_CR = UART_CR_REQCLR ;
   if(Isr_Callback != NULL)
   	{
   		Isr_Callback((uint8_t)1);

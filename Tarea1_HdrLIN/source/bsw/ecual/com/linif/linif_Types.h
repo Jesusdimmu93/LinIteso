@@ -7,6 +7,7 @@
 \project    LIN
 \date       22/March/2018
 */
+
 /****************************************************************************************************/
 
 /********************************************************************************
@@ -52,7 +53,7 @@ typedef uint8_t LinFramePidType;
 typedef uint8_t LinFrameDlType;
 
 /*This type is used to provide PID, checksum model, data length and SDU pointer to the LIN driver*/
-typedef struct 
+typedef struct
 {
     LinFramePidType        Pid;
     LinFrameCsModelType    Cs;

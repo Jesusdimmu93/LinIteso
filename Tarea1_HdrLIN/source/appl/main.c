@@ -6,6 +6,7 @@
 #include "app_scheduler.h"
 #include "Tasks.h"
 #include "linif_cfg.h"
+#include "linNm.h"
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -62,7 +63,7 @@ extern int main( void )
 	//printf( "Configure LED PIOs.\n\r" ) ;
 	_ConfigureLeds() ;
 	
-  	/*Baudrate Hardcoded*/
+  	LinNm_InitData();
     Lin_Init(&LinConfig);
   	/* Initialize Task Scheduler */
 	vfnScheduler_Init(&Tasks[0]);
