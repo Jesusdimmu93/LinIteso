@@ -7,7 +7,8 @@
 \project    LIN
 \date       22/March/2018
 */
-
+#ifndef LINIF_TYPES_H
+#define LINIF_TYPES_H
 /****************************************************************************************************/
 
 /********************************************************************************
@@ -62,3 +63,4 @@ typedef struct
     LinFrameDlType         Dl;
     uint8_t*               SduPtr;
 }LinPduType;
+#endif

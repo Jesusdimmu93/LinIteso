@@ -9,25 +9,36 @@
 /****************************************************************************************************/
 
 /********************************************************************************
- *                               Include Files
- ********************************************************************************/
+*                               Include Files
+********************************************************************************/
+#include "linNm.h"
 #include "linif.h"
-#include "stdlib.h"
+/*******************************************************************************
+*                               Macro Definitions
+********************************************************************************/
 
- /*******************************************************************************
- *                               Macro Definitions
- ********************************************************************************/
+/*******************************************************************************
+*                               Global Variable Definitions
+********************************************************************************/
+uint8_t sdu_Tx_Array[1][8] = 
+{
+    {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08} /*Sample values*/
+};
 
- /*******************************************************************************
- *                               Global Variable Definitions
- ********************************************************************************/
- // HardCoded LinPduType
-LinPduType LinData;
-uint8_t dataToSend[4] = {1, 2, 3, 4};
+uint8_t sdu_Rx[8];
+
+/*This array contains the the Pdu's from the master node*/
+LinPduType PduArray[] =
+{
+    {0x3C, LIN_CLASSIC_CS, LIN_MASTER_RESPONSE, 8, &sdu_Tx_Array[0][0]},
+    {0x7D, LIN_ENHANCED_CS, LIN_MASTER_RESPONSE/*LIN_SLAVE_RESPONSE*/, 2, &sdu_Rx[0]}
+};
+
+uint8_t Num_Pdus;
 /********************************************************************************
 *                               Static Function Declarations
 ********************************************************************************/
-
+static void LoadPdus (void);
 /********************************************************************************
  *                               Global and Static Function Definitions
  ********************************************************************************/
@@ -44,13 +55,8 @@ uint8_t dataToSend[4] = {1, 2, 3, 4};
 *****************************************************************************/
 void LinNm_InitData (void)
 {
-    //HardCoded data for test LIN Driver.
-    LinData.Pid = 0x05;
-    LinData.Cs = LIN_CLASSIC_CS;
-    LinData.Drc = LIN_MASTER_RESPONSE;
-    LinData.Dl = 4;
-    LinData.SduPtr = &dataToSend[0];
-
+    Num_Pdus = (sizeof(PduArray)/ sizeof(LinPduType));
+    LoadPdus();
 }
 
 /*****************************************************************************
@@ -65,10 +71,33 @@ void LinNm_InitData (void)
 *****************************************************************************/
 void LinNm_10ms (void)
 {
-  Lin_SendFrame(1, &LinData);
-  if(LinData.Drc == LIN_SLAVE_RESPONSE)
-  {
-    /* read response */
+    static PduCalls_idx = 0;
+
+    if(PduCalls_idx >= Num_Pdus)
+    {
+        PduCalls_idx = 0;
+        LinNm_InitData;//LoadPdus();
+    }
+    Lin_SendFrame((uint16_t)LIN1_ID, &PduArray[PduCalls_idx]);
+    PduCalls_idx++;
+}
+
+void LoadPdus (void)
+{
+    uint8_t pdu_idx, sdu_idx, counter;
+    //uint8_t Num_Pdus;
+
     
-  }
+    for(pdu_idx = 0; pdu_idx > Num_Pdus; pdu_idx ++)
+    {
+        if(PduArray[pdu_idx].Drc == LIN_MASTER_RESPONSE)
+        {
+            counter = 0;
+            for(sdu_idx = 0; sdu_idx < PduArray[pdu_idx].Dl; sdu_idx++)
+            {
+                PduArray[pdu_idx].SduPtr[sdu_idx] = (uint8_t)counter;
+                counter++;
+            }
+        }
+    }
 }
