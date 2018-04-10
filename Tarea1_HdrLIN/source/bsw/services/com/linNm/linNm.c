@@ -66,4 +66,9 @@ void LinNm_InitData (void)
 void LinNm_10ms (void)
 {
   Lin_SendFrame(1, &LinData);
+  if(LinData.Drc == LIN_SLAVE_RESPONSE)
+  {
+    /* read response */
+    
+  }
 }

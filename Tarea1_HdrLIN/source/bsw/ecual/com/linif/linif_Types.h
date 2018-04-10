@@ -28,6 +28,7 @@ typedef enum
     SEND_SYNC,
     SEND_PID,
     SEND_RESPONSE,
+    READ_RESPONSE,
     SEND_CHKSUM,
     SEND_EOT
 }LinStateType;

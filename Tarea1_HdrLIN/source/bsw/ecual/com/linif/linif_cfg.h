@@ -16,9 +16,9 @@
 /********************************************************************************
 *                               Macro Definitions
 ********************************************************************************/
-#define BAUDR_19200  (uint32_t)19200u
-#define BAUDR_9600   (uint32_t)9600u
-#define BAUDR_2400   (uint32_t)2400u
+#define BAUDR_19200  (uint16_t)19200u
+#define BAUDR_9600   (uint16_t)9600u
+#define BAUDR_2400   (uint16_t)2400u
 
 /********************************************************************************
 *                               Type Definitions
@@ -35,7 +35,7 @@ enum LinId
 typedef struct
 {
     uint8_t LinChannelId;
-    uint32_t LinChannelBaudrate;
+    uint16_t LinChannelBaudrate;
 }LinChannelType;
 
 /*Configuration of the Lin (LIN driver) module*/
