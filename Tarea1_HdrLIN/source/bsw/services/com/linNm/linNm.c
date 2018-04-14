@@ -30,8 +30,8 @@ uint8_t sdu_Rx[8];
 /*This array contains the the Pdu's from the master node*/
 LinPduType PduArray[] =
 {
-    {0x3C, LIN_CLASSIC_CS, LIN_MASTER_RESPONSE, 8, &sdu_Tx_Array[0][0]},
-    {0x7D, LIN_ENHANCED_CS, LIN_MASTER_RESPONSE/*LIN_SLAVE_RESPONSE*/, 2, &sdu_Rx[0]}
+    {0x3C, LIN_CLASSIC_CS, LIN_MASTER_RESPONSE, 8, &sdu_Tx_Array[0][0]} //,
+    //{0x7D, LIN_ENHANCED_CS, LIN_MASTER_RESPONSE/*LIN_SLAVE_RESPONSE*/, 2, &sdu_Rx[0]}
 };
 
 uint8_t Num_Pdus;
@@ -76,19 +76,18 @@ void LinNm_10ms (void)
     if(PduCalls_idx >= Num_Pdus)
     {
         PduCalls_idx = 0;
-        LinNm_InitData;//LoadPdus();
+        LoadPdus();
     }
-    Lin_SendFrame((uint16_t)LIN1_ID, &PduArray[PduCalls_idx]);
+    (void)Lin_SendFrame((uint16_t)LIN1_ID, &PduArray[PduCalls_idx]);
     PduCalls_idx++;
 }
 
+/*This function reloads the PDUs in case they where erased by lower layers for control purposes */
 void LoadPdus (void)
 {
     uint8_t pdu_idx, sdu_idx, counter;
-    //uint8_t Num_Pdus;
-
     
-    for(pdu_idx = 0; pdu_idx > Num_Pdus; pdu_idx ++)
+    for(pdu_idx = 0; pdu_idx < Num_Pdus; pdu_idx ++)
     {
         if(PduArray[pdu_idx].Drc == LIN_MASTER_RESPONSE)
         {

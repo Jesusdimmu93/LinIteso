@@ -269,10 +269,10 @@ void UART_CompareConfig(Uart *uart, uint8_t Val1, uint8_t Val2)
  */
 void UART4_Handler (void)
 {
-	if(Isr_Callback != NULL)
-	{
-		Isr_Callback((uint8_t)3);
-	}
+    if(Isr_Callback != NULL)
+    {
+        Isr_Callback((uint8_t)2);
+    }
 }
 
 /**
@@ -282,8 +282,21 @@ void UART4_Handler (void)
  */
 void UART2_Handler()
 {
-  if(Isr_Callback != NULL)
-  	{
-  		Isr_Callback((uint8_t)1);
-  	}
-	}          
+    if(Isr_Callback != NULL)
+    {
+        Isr_Callback((uint8_t)1);
+    }
+}
+
+/**
+ * \brief UART0 Handler.
+ *
+ * \param None.
+ */
+void UART0_Handler()
+{
+    if(Isr_Callback != NULL)
+    {
+        Isr_Callback((uint8_t)0);
+    }
+}
