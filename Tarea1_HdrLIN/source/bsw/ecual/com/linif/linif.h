@@ -23,6 +23,15 @@
 #define BREAK_CMD  0x00
 #define SYNC_CMD   0x55
 
+#define ID0_MASK_POS   0
+#define ID1_MASK_POS   1
+#define ID2_MASK_POS   2
+#define ID3_MASK_POS   3
+#define ID4_MASK_POS   4
+#define ID5_MASK_POS   5
+#define PO_MASK_POS    6
+#define P1_MASK_POS    7
+#define D_MASK         0x3F
 /********************************************************************************
 *                               Type Definitions
 ********************************************************************************/
