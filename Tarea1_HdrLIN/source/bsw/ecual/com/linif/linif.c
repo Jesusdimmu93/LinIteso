@@ -160,7 +160,7 @@ Std_ReturnType Lin_SendFrame ( uint8_t Channel, LinPduType* PduInfoPtr)
         {
             LinCtlChnl[Channel].RxRead = FALSE;
         }
-        
+            
         LinCtlChnl[Channel].LinState = SEND_BREAK;
         /*Hard call to ISR handler to process first part of LIN header, otherwise it cannot be *
         activated on the first instance*/
