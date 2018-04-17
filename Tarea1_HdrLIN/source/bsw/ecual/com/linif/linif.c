@@ -156,6 +156,10 @@ Std_ReturnType Lin_SendFrame ( uint8_t Channel, LinPduType* PduInfoPtr)
         {
             Lin_CheckSum(Channel);
         }
+        else
+        {
+            LinCtlChnl[Channel].RxRead = FALSE;
+        }
         
         LinCtlChnl[Channel].LinState = SEND_BREAK;
         /*Hard call to ISR handler to process first part of LIN header, otherwise it cannot be *
@@ -271,7 +275,7 @@ void Lin_Isr(uint8_t Channel)
                 LinCtlChnl[Channel].LinState = READ_RESPONSE;
                 LinCtlChnl[Channel].LinTxCnt = 0;
                 LinCtlChnl[Channel].RxFinished = FALSE;
-                LinCtlChnl[Channel].RxRead = FALSE;
+                
                 UART_EnableIt(UartChannel[Channel].uart, UART_IER_RXRDY);
             }
         break;
