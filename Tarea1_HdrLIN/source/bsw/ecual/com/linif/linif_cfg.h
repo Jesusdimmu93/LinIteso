@@ -35,7 +35,7 @@ enum LinId
 /*This container contains the configuration parameters of the LIN channel*/
 typedef struct
 {
-    uint8_t LinChannelId;
+    uint8_t LinChannelId;/*Physical channel*/
     uint16_t LinChannelBaudrate;
 }LinChannelType;
 
