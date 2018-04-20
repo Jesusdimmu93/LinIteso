@@ -21,21 +21,24 @@
 #define BAUDR_9600   (uint16_t)9600u
 #define BAUDR_2400   (uint16_t)2400u
 
+#define MAX_NUM_UART_CHANNELS    5u
 /********************************************************************************
 *                               Type Definitions
 ********************************************************************************/
-enum LinId
+enum LinId 		/*Physical UART Channel*/
 {
   LIN0_ID = 0,
 	LIN1_ID,
 	LIN2_ID,
+	LIN3_ID,
+	LIN4_ID
 };
 
 
 /*This container contains the configuration parameters of the LIN channel*/
 typedef struct
 {
-    uint8_t LinChannelId;/*Physical channel*/
+    uint8_t LinChannelId;
     uint16_t LinChannelBaudrate;
 }LinChannelType;
 

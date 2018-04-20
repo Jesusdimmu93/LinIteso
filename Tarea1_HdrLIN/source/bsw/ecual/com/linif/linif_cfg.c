@@ -22,7 +22,9 @@
 ********************************************************************************/
 LinChannelType LinChannel[] = 
 {
-	{(uint16_t)LIN1_ID, BAUDR_19200}
+	/*Cambiar por canal fisico*/
+	{(uint8_t)LIN2_ID, BAUDR_19200} /*Canal logico 0*/
+
 };
 
 

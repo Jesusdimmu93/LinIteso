@@ -262,16 +262,32 @@ void UART_CompareConfig(Uart *uart, uint8_t Val1, uint8_t Val2)
 	uart->UART_CMPR = (UART_CMPR_VAL1(Val1) | UART_CMPR_VAL2(Val2));
 }
 
+
+
+
 /**
- * \brief UART4 Handler.
+ * \brief UART0 Handler.
  *
  * \param None.
  */
-void UART4_Handler (void)
+void UART0_Handler()
 {
     if(Isr_Callback != NULL)
     {
-        Isr_Callback((uint8_t)2);
+        Isr_Callback((uint8_t)0);	/*Physical Channel 0*/
+    }
+}
+
+/**
+ * \brief UART1 Handler.
+ *
+ * \param None.
+ */
+void UART1_Handler()
+{
+    if(Isr_Callback != NULL)
+    {
+        Isr_Callback((uint8_t)1);	/*Physical Channel 1*/
     }
 }
 
@@ -284,19 +300,35 @@ void UART2_Handler()
 {
     if(Isr_Callback != NULL)
     {
-        Isr_Callback((uint8_t)1);
+        Isr_Callback((uint8_t)2);	/*Physical Channel 2*/
     }
 }
 
 /**
- * \brief UART0 Handler.
+ * \brief UART3 Handler.
  *
  * \param None.
  */
-void UART0_Handler()
+void UART3_Handler()
 {
     if(Isr_Callback != NULL)
     {
-        Isr_Callback((uint8_t)0);
+        Isr_Callback((uint8_t)3);	/*Physical Channel 3*/
     }
 }
+
+/**
+ * \brief UART4 Handler.
+ *
+ * \param None.
+ */
+void UART4_Handler (void)
+{
+    if(Isr_Callback != NULL)
+    {
+        Isr_Callback((uint8_t)4);	/*Physical Channel 4*/
+    }
+}
+
+
+

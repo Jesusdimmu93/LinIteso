@@ -259,6 +259,9 @@
 #define PINS_UART2\
 		{PIO_PD25C_URXD2 | PIO_PD26C_UTXD2, PIOD, ID_PIOD, PIO_PERIPH_C, PIO_DEFAULT}
 
+/*Same as PINS_UART0 for practical purposes*/
+#define PINS_UART1 PINS_UART0
+#define PINS_UART3 PINS_UART0
 /* LED pins definitions */
 #define LED_YELLOW0  0
 #define LED_YELLOW1  1

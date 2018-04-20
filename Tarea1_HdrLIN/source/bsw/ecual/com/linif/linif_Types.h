@@ -30,6 +30,7 @@ typedef enum
     SEND_PID,
     SEND_RESPONSE,
     READ_RESPONSE,
+    GET_CHKSUM,
     SEND_CHKSUM,
     SEND_EOT
 }LinStateType;
