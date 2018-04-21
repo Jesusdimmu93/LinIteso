@@ -207,9 +207,7 @@ Std_ReturnType Lin_SendFrame ( uint8_t Channel, LinPduType* PduInfoPtr)
         }
             
         LinCtlChnl[Channel].LinState = SEND_BREAK;
-        /*Hard call to ISR handler to process first part of LIN header, otherwise it cannot be *
-        activated on the first instance*/
-        //Lin_Isr(LinCfgGlb->LinChannel[Channel].LinChannelId);
+        /* Enable UART_IER_TXEMPTY interruption, it will generate first interruption for start state machine in Lin_Isr function*/
         UART_EnableIt(UartChannel[LinCfgGlb->LinChannel[Channel].LinChannelId].uart, UART_IER_TXEMPTY);
         RtnVal = E_OK;
     }
@@ -233,11 +231,11 @@ Std_ReturnType Lin_SendFrame ( uint8_t Channel, LinPduType* PduInfoPtr)
 Std_ReturnType Lin_GetSlaveResponse ( uint8_t Channel, uint8_t** LinSduPtr )
 {
     Std_ReturnType retVal;
-    uint8_t* tempPointer;
+    //uint8_t* tempPointer;
     if(LinCtlChnl[Channel].RxFinished == TRUE)
     {
-        tempPointer = &LinCtlChnl[Channel].LinPduFrame.SduPtr[0];
-        LinSduPtr = &tempPointer;
+        //tempPointer = &LinCtlChnl[Channel].LinPduFrame.SduPtr[0];
+        *LinSduPtr = &LinCtlChnl[Channel].LinPduFrame.SduPtr[0];//&tempPointer;
         LinCtlChnl[Channel].RxRead = TRUE;
         retVal = E_OK;
     }
@@ -247,7 +245,6 @@ Std_ReturnType Lin_GetSlaveResponse ( uint8_t Channel, uint8_t** LinSduPtr )
     }
 
     return retVal;
-  uint8_t Crc_Byte;
 
 }
 
@@ -258,9 +255,6 @@ void Lin_Isr(uint8_t PhyChannel)
 
     myUart = UartChannel[PhyChannel].uart;
     Channel = Phy_to_Logic_Chnl[PhyChannel];
-    //UART_DisableIt(myUart, UART_IDR_TXEMPTY);
-    //UART_DisableIt(myUart, UART_IDR_RXRDY);
-    //UART_SetTransmitterEnabled(myUart, 0);  /*Disable UART*/
 
     switch(LinCtlChnl[Channel].LinState)
     {
@@ -268,44 +262,35 @@ void Lin_Isr(uint8_t PhyChannel)
             /*Sending Break */
             /*Configre new baudrate to make a larger stop in order to accomplish the Break time*/
             UART_UpdateBaudRate(myUart, ((uint32_t)LinCfgGlb->LinChannel[Channel].LinChannelBaudrate*5)/8);
-            //UART_SetTransmitterEnabled(myUart,(uint8_t) 1); /*Enable UART*/
             UART_PutCharAsync(myUart, BREAK_CMD);
             LinCtlChnl[Channel].LinState = SEND_SYNC;
-            //UART_EnableIt(myUart, UART_IER_TXEMPTY);
         break;
 
         case SEND_SYNC:
               /*Update Baud rate*/
               UART_UpdateBaudRate(myUart, (uint32_t)LinCfgGlb->LinChannel[Channel].LinChannelBaudrate);
               /*Sending Sync*/
-              //UART_SetTransmitterEnabled(myUart,(uint8_t) 1); /*Enable UART*/
               UART_PutCharAsync(myUart, SYNC_CMD);
               LinCtlChnl[Channel].LinState = SEND_PID;
-              //UART_EnableIt(myUart, UART_IER_TXEMPTY);
         break;
     
         case SEND_PID:
             /*Sending Pid*/
-            //UART_SetTransmitterEnabled(myUart,(uint8_t) 1); /*Enable UART*/
             UART_PutCharAsync(myUart,(uint8_t) LinCtlChnl[Channel].Pid );
             if(LinCtlChnl[Channel].LinPduFrame.Drc==LIN_MASTER_RESPONSE)
             {
                 LinCtlChnl[Channel].LinState = SEND_RESPONSE;
                 LinCtlChnl[Channel].LinTxCnt = 0;
-                //UART_EnableIt(myUart, UART_IER_TXEMPTY);
             }
             else if(LinCtlChnl[Channel].LinPduFrame.Drc==LIN_SLAVE_RESPONSE)
             {
                 LinCtlChnl[Channel].LinState = READ_RESPONSE;
                 LinCtlChnl[Channel].LinTxCnt = 0;
                 LinCtlChnl[Channel].RxFinished = FALSE;
-                
-                //UART_EnableIt(myUart, UART_IER_TXEMPTY);
             }
         break;
 
         case SEND_RESPONSE:
-            //UART_SetTransmitterEnabled(myUart,(uint8_t) 1); /*Enable UART*/
             UART_PutCharAsync(myUart,(uint8_t) LinCtlChnl[Channel].LinPduFrame.SduPtr[LinCtlChnl[Channel].LinTxCnt]);
             LinCtlChnl[Channel].LinTxCnt++;
             if(LinCtlChnl[Channel].LinTxCnt >= LinCtlChnl[Channel].LinPduFrame.Dl)
@@ -313,11 +298,9 @@ void Lin_Isr(uint8_t PhyChannel)
                 LinCtlChnl[Channel].LinTxCnt = 0;
                 LinCtlChnl[Channel].LinState = SEND_CHKSUM;
             }
-            //UART_EnableIt(myUart, UART_IER_TXEMPTY);
         break;
         
         case READ_RESPONSE:
-            //UART_SetReceiverEnabled(myUart,(uint8_t) 1); /*Enable UART Rx*/
             LinCtlChnl[Channel].LinPduFrame.SduPtr[LinCtlChnl[Channel].LinTxCnt] = UART_GetChar(myUart);
             LinCtlChnl[Channel].LinTxCnt++;
             if(LinCtlChnl[Channel].LinTxCnt >= LinCtlChnl[Channel].LinPduFrame.Dl)
@@ -326,7 +309,7 @@ void Lin_Isr(uint8_t PhyChannel)
                 LinCtlChnl[Channel].LinState = GET_CHKSUM;
                 //LinCtlChnl[Channel].RxFinished = TRUE;
             }
-            if(LinCtlChnl[Channel].LinTxCnt == 0)
+            if(LinCtlChnl[Channel].LinTxCnt == 0)/*switch from UART_IDR_TXEMPTY to UART_IER_RXRDY*/
             {
               UART_EnableIt(myUart, UART_IER_RXRDY);
               UART_DisableIt(myUart, UART_IDR_TXEMPTY);
@@ -334,7 +317,6 @@ void Lin_Isr(uint8_t PhyChannel)
           break;
 
         case GET_CHKSUM:
-            //UART_SetTransmitterEnabled(myUart,(uint8_t) 1); /*Enable UART*/
             LinCtlChnl[Channel].CheckSum = UART_GetChar(myUart);
             if(LinCtlChnl[Channel].CheckSum == Lin_CheckSum(Channel))
             {
@@ -342,19 +324,21 @@ void Lin_Isr(uint8_t PhyChannel)
             }
             LinCtlChnl[Channel].LinState = IDLE;
             LinCtlChnl[Channel].RxFinished = TRUE;
+            /*Read response have finished, Disable UART_IDR_RXRDY*/
             UART_DisableIt(myUart, UART_IDR_RXRDY);
-            //UART_SetReceiverEnabled(myUart,(uint8_t) 0); /*Disable UART Rx*/
           break;
 
         case SEND_CHKSUM:
-            //UART_SetTransmitterEnabled(myUart,(uint8_t) 1); /*Enable UART*/
             /*include here real checkSum*/
             UART_PutCharAsync(myUart, LinCtlChnl[Channel].CheckSum);
             LinCtlChnl[Channel].LinState = IDLE;
+            /*Next UART_IDR_TXEMPTY interruption will go to default case(IDLE)
+             * there, UART_IDR_TXEMPTY will be disabled*/
         break;
 
         default:
             LinCtlChnl[Channel].LinState = IDLE;
+            /*Send response have finished, Disable UART_IDR_TXEMPTY*/
             UART_DisableIt(myUart, UART_IDR_TXEMPTY);
         break;
     }
