@@ -26,12 +26,13 @@ uint8_t sdu_Tx_Array[1][8] =
 };
 
 uint8_t sdu_Rx[8];
+uint8_t** rxPtr;
 
 /*This array contains the the Pdu's from the master node*/
 LinPduType PduArray[] =
 {
-    {0x3D, LIN_CLASSIC_CS, LIN_MASTER_RESPONSE, 8, &sdu_Tx_Array[0][0]} //,
-    //{0x7D, LIN_ENHANCED_CS, LIN_MASTER_RESPONSE/*LIN_SLAVE_RESPONSE*/, 2, &sdu_Rx[0]}
+    {0x3D, LIN_CLASSIC_CS, LIN_MASTER_RESPONSE, 8, &sdu_Tx_Array[0][0]},
+    {0x7D, LIN_ENHANCED_CS, LIN_SLAVE_RESPONSE, 2, &sdu_Rx[0]}
 };
 
 uint8_t Num_Pdus;
@@ -78,7 +79,12 @@ void LinNm_10ms (void)
         PduCalls_idx = 0;
         LoadPdus();
     }
-    (void)Lin_SendFrame((uint16_t)LIN2_ID, &PduArray[PduCalls_idx]);
+    (void)Lin_SendFrame((uint16_t)0, &PduArray[PduCalls_idx]);
+    if(PduArray[PduCalls_idx].Drc == LIN_SLAVE_RESPONSE)
+    {
+        while(Lin_GetSlaveResponse((uint16_t)0, rxPtr) != E_OK)
+        {}
+    }
     PduCalls_idx++;
 }
 
