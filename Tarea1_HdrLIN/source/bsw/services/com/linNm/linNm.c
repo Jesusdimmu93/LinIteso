@@ -32,7 +32,7 @@ uint8_t** rxPtr;
 LinPduType PduArray[] =
 {
     {0x3D, LIN_CLASSIC_CS, LIN_MASTER_RESPONSE, 8, &sdu_Tx_Array[0][0]},
-    {0x7D, LIN_ENHANCED_CS, LIN_SLAVE_RESPONSE, 2, &sdu_Rx[0]}
+    {0x7D, LIN_ENHANCED_CS, LIN_SLAVE_RESPONSE, 8, &sdu_Rx[0]}
 };
 
 uint8_t Num_Pdus;
